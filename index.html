@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiago Lagos — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --surface: #161618;
+    --card: #1e1e22;
+    --accent: #c8a96e;
+    --accent2: #7ec8e3;
+    --text: #f0ece4;
+    --muted: #888880;
+    --border: rgba(200,169,110,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(13,13,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    font-weight: 700;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  #lang-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.3rem 0.85rem;
+    cursor: pointer;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  #lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%; right: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -10%; left: 20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(126,200,227,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    width: 100%;
+  }
+  .hero-text {}
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 900;
+    line-height: 1.0;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-name span { color: var(--accent); }
+  .hero-role {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .tag {
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+  .btn-primary {
+    padding: 0.85rem 2rem;
+    background: var(--accent);
+    color: #0d0d0f;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+  .btn-secondary {
+    padding: 0.85rem 2rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-photo {
+    position: relative;
+    opacity: 0;
+    animation: fadeIn 1s 0.5s forwards;
+  }
+  .hero-photo-frame {
+    width: 340px;
+    height: 400px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-photo-frame::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border: 1px solid var(--border);
+    transform: rotate(3deg);
+  }
+  .hero-photo-frame::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 1px solid rgba(200,169,110,0.1);
+    transform: rotate(-1.5deg);
+  }
+  .hero-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(20%) contrast(1.05);
+  }
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3rem;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  /* SECTIONS */
+  section { padding: 6rem 4rem; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .section-subtitle {
+    color: var(--muted);
+    max-width: 540px;
+    margin-bottom: 3.5rem;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 4rem;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    line-height: 1.8;
+  }
+  .about-text p strong { color: var(--text); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .skill-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    transition: border-color 0.2s;
+  }
+  .skill-item:hover { border-color: var(--accent); }
+  .skill-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .skill-bar {
+    height: 2px;
+    background: rgba(200,169,110,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  /* EXPERIENCE */
+  .exp-section { background: var(--surface); }
+  .exp-timeline { position: relative; }
+  .exp-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .exp-item {
+    padding: 0 0 3rem 3rem;
+    position: relative;
+  }
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -4px; top: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .exp-year {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .exp-role {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .exp-company {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+  .exp-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* EDUCATION */
+  .edu-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .edu-degree {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .edu-school {
+    color: var(--accent);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .edu-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .edu-badge {
+    padding: 0.3rem 0.8rem;
+    background: rgba(200,169,110,0.1);
+    border: 1px solid rgba(200,169,110,0.2);
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+
+  /* LANGUAGES */
+  .lang-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .lang-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .lang-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .lang-flag { font-size: 2rem; margin-bottom: 0.5rem; }
+  .lang-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .lang-level { font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; }
+
+  /* PROJECTS */
+  .projects-section { background: var(--surface); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .project-card.wide { grid-column: span 2; }
+  .project-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    filter: brightness(0.85);
+    transition: filter 0.3s, transform 0.4s;
+  }
+  .project-card:hover .project-img { filter: brightness(1); transform: scale(1.02); }
+  .project-img-wrap { overflow: hidden; }
+  .project-body { padding: 1.5rem; }
+  .project-cat {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  .project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+  .project-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .project-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  .tool-tag {
+    padding: 0.2rem 0.6rem;
+    background: rgba(126,200,227,0.08);
+    border: 1px solid rgba(126,200,227,0.15);
+    font-size: 0.7rem;
+    color: var(--accent2);
+    letter-spacing: 0.05em;
+  }
+
+  /* BI DASHBOARDS */
+  .dashboards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .dashboard-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .dashboard-card:hover { border-color: var(--accent2); transform: translateY(-4px); }
+  .dashboard-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    filter: brightness(0.9);
+    transition: filter 0.3s;
+  }
+  .dashboard-card:hover .dashboard-img { filter: brightness(1); }
+  .dashboard-body { padding: 1.2rem 1.5rem; }
+  .dashboard-title { font-weight: 600; margin-bottom: 0.3rem; }
+  .dashboard-desc { font-size: 0.82rem; color: var(--muted); }
+
+  /* DOCUMENTS */
+  .docs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .doc-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .doc-card:hover { border-color: var(--accent); }
+  .doc-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(200,169,110,0.1);
+    border: 1px solid rgba(200,169,110,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .doc-info {}
+  .doc-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.3rem; }
+  .doc-type { font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .doc-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+  /* CONTACT */
+  .contact-section { background: var(--surface); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .contact-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .contact-item:last-child { border-bottom: none; }
+  .contact-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(200,169,110,0.08);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 0.2rem; }
+  .contact-value { font-weight: 500; font-size: 0.95rem; }
+  .contact-value a { color: var(--text); text-decoration: none; }
+  .contact-value a:hover { color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .footer-text { font-size: 0.8rem; color: var(--muted); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    backdrop-filter: blur(8px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  .modal-close {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    z-index: 1;
+  }
+  .modal-close button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+  .modal-close button:hover { border-color: var(--accent); color: var(--accent); }
+  .modal-content { padding: 2rem; }
+  .modal-img { width: 100%; display: block; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .hero { padding: 6rem 1.5rem 3rem; }
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-photo-frame { width: 240px; height: 280px; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .projects-grid, .dashboards-grid, .docs-grid { grid-template-columns: 1fr; }
+    .project-card.wide { grid-column: span 1; }
+    .lang-grid { grid-template-columns: repeat(2, 1fr); }
+    .divider { margin: 0 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">TL</div>
+  <ul class="nav-links">
+    <li><a href="#sobre" data-i18n="nav-sobre">Sobre</a></li>
+    <li><a href="#experiencia" data-i18n="nav-exp">Experiência</a></li>
+    <li><a href="#projetos" data-i18n="nav-proj">Projetos</a></li>
+    <li><a href="#bi" data-i18n="nav-bi">Business Intelligence</a></li>
+    <li><a href="#documentos" data-i18n="nav-docs">Documentos</a></li>
+    <li><a href="#contacto" data-i18n="nav-contact">Contacto</a></li>
+  </ul>
+  <button id="lang-toggle" onclick="toggleLang()">EN</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow" data-i18n="hero-eyebrow">Portfolio Profissional</p>
+      <h1 class="hero-name">Tiago<br><span>Lagos</span></h1>
+      <p class="hero-role" data-i18n-html="hero-role">Relações Humanas · Manager · Team Leader<br>com interesse em Marketing Digital &amp; Business Intelligence</p>
+      <div class="hero-tags">
+        <span class="tag" data-i18n="tag-rh">Recursos Humanos</span>
+        <span class="tag" data-i18n="tag-equipas">Gestão de Equipas</span>
+        <span class="tag" data-i18n="tag-marketing">Marketing Digital</span>
+        <span class="tag">Power BI</span>
+        <span class="tag" data-i18n="tag-logistica">Logística</span>
+        <span class="tag" data-i18n="tag-comunicacao">Comunicação</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#projetos" class="btn-primary" data-i18n="btn-trabalhos">Ver Trabalhos</a>
+        <a href="#contacto" class="btn-secondary" data-i18n="btn-contactar">Contactar</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="hero-photo-frame">
+        <img src="profile_photo.jpeg" alt="Tiago Lagos" class="hero-photo-img">
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">18+</span>
+          <span class="stat-label" data-i18n="stat-anos">Anos Exp.</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">350+</span>
+          <span class="stat-label" data-i18n="stat-entrevistas">Entrevistas</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">4</span>
+          <span class="stat-label" data-i18n="stat-linguas">Línguas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-inner">
+    <p class="section-label reveal" data-i18n="lbl-quem-sou">Quem Sou</p>
+    <h2 class="section-title reveal" data-i18n="ttl-sobre">Sobre Mim</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p data-i18n-html="about-p1">Licenciado em <strong>Relações Humanas e Comunicação Organizacional</strong>, com experiência consolidada em liderança de equipas, recursos humanos e operações.</p>
+        <p data-i18n-html="about-p2">Com mais de <strong>18 anos de experiência</strong> em logística e supply chain, tive a oportunidade de trabalhar em vários setores, incluindo informática, eletrónica, música e retalho.</p>
+        <p data-i18n-html="about-p3">Lidero pelo exemplo, esforçando-me por inspirar aqueles ao meu redor com uma forte ética de trabalho, elevados padrões e <strong>pensamento crítico</strong>. Estou constantemente à procura de formas de melhorar a eficiência.</p>
+        <p data-i18n-html="about-p4">Destaco-me pela capacidade de comunicação, gestão de pessoas e análise de processos, com interesse em desenvolver carreira nas áreas de <strong>comunicação organizacional, recursos humanos e marketing digital</strong>.</p>
+      </div>
+      <div class="reveal">
+        <p class="section-label" style="margin-bottom:1.2rem;" data-i18n="lbl-competencias">Competências</p>
+        <div class="skills-grid">
+          <div class="skill-item">
+            <div class="skill-name" data-i18n="skill-lideranca">Liderança de Equipas</div>
+            <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-name" data-i18n="skill-comunicacao">Comunicação Eficaz</div>
+            <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-name" data-i18n="skill-marketing">Marketing Digital</div>
+            <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-name">Power BI</div>
+            <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-name" data-i18n="skill-tempo">Gestão do Tempo</div>
+            <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-name" data-i18n="skill-resolucao">Resolução Problemas</div>
+            <div class="skill-bar"><div class="skill-fill" style="width:87%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-name" data-i18n="skill-recrutamento">Recrutamento &amp; RH</div>
+            <div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-name" data-i18n="skill-critico">Pensamento Crítico</div>
+            <div class="skill-bar"><div class="skill-fill" style="width:93%"></div></div>
+          </div>
+        </div>
+        <p class="section-label" style="margin-top:2rem;margin-bottom:1rem;" data-i18n="lbl-linguas">Línguas</p>
+        <div class="lang-grid" style="grid-template-columns:repeat(2,1fr)">
+          <div class="lang-card">
+            <div class="lang-flag">🇵🇹</div>
+            <div class="lang-name" data-i18n="lang-name-pt">Português</div>
+            <div class="lang-level" data-i18n="lang-nativo">Nativo</div>
+          </div>
+          <div class="lang-card">
+            <div class="lang-flag">🇬🇧</div>
+            <div class="lang-name" data-i18n="lang-name-en">Inglês</div>
+            <div class="lang-level" data-i18n="lang-avancado">Avançado · C1</div>
+          </div>
+          <div class="lang-card">
+            <div class="lang-flag">🇫🇷</div>
+            <div class="lang-name" data-i18n="lang-name-fr">Francês</div>
+            <div class="lang-level" data-i18n="lang-intermedio-b2">Intermédio · B2</div>
+          </div>
+          <div class="lang-card">
+            <div class="lang-flag">🇪🇸</div>
+            <div class="lang-name" data-i18n="lang-name-es">Espanhol</div>
+            <div class="lang-level" data-i18n="lang-intermedio-b1">Intermédio · B1</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIÊNCIA -->
+<section id="experiencia" class="exp-section">
+  <div class="section-inner">
+    <p class="section-label reveal" data-i18n="lbl-trajetoria">Trajetória</p>
+    <h2 class="section-title reveal" data-i18n="ttl-exp">Experiência Profissional</h2>
+    <p class="section-subtitle reveal" data-i18n="sub-exp">Uma carreira construída com liderança, adaptabilidade e resultados consistentes.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;" class="reveal">
+      <div class="exp-timeline">
+        <div class="exp-item">
+          <div class="exp-year" data-i18n="exp-year-1">2025 · Atual</div>
+          <div class="exp-role" data-i18n="exp-role-1">Assistente de Recursos Humanos</div>
+          <div class="exp-company" data-i18n="exp-co-1">MD Plastics · Estágio Curricular</div>
+          <div class="exp-desc" data-i18n="exp-desc-1">Desenvolvimento de planos de comunicação interna. Criação e atualização de descrições de funções. Monitorização de indicadores de RH (absentismo e rotatividade). Gestão administrativa de colaboradores.</div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-year" data-i18n="exp-year-2">2023 — 2024</div>
+          <div class="exp-role" data-i18n="exp-role-2">Team Lead · Manager</div>
+          <div class="exp-company" data-i18n="exp-co-2">Nike · Roermond, Países Baixos</div>
+          <div class="exp-desc" data-i18n="exp-desc-2">Liderança de equipa com cerca de 20 colaboradores em ambiente de alta performance. Planeamento operacional, análise de KPIs e implementação de melhorias contínuas. Recrutamento e formação de novos colaboradores.</div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-year" data-i18n="exp-year-3">2020 — 2023</div>
+          <div class="exp-role" data-i18n="exp-role-3">Gestor de Operações de Armazém</div>
+          <div class="exp-company" data-i18n="exp-co-3">Pc Diga</div>
+          <div class="exp-desc" data-i18n="exp-desc-3">Gestão de stocks e encomendas através de SAP. Coordenação de equipa e organização de operações diárias. Planeamento semanal e otimização de processos. Formação de novos colaboradores.</div>
+        </div>
+      </div>
+      <div>
+        <p class="section-label" style="margin-bottom:1.5rem;" data-i18n="lbl-formacao">Formação Académica</p>
+        <div class="edu-card">
+          <div class="edu-degree" data-i18n="edu-degree">Licenciatura em Relações Humanas e Comunicação Organizacional</div>
+          <div class="edu-school">ESECS — Escola Superior de Educação e Ciências Sociais, Leiria</div>
+          <div class="edu-highlights">
+            <span class="edu-badge" data-i18n="edu-b-marketing">Marketing Digital — 19</span>
+            <span class="edu-badge" data-i18n="edu-b-estagio">Estágio Curricular — 18</span>
+            <span class="edu-badge" data-i18n="edu-b-multimedia">Comunicação Multimédia — 17</span>
+            <span class="edu-badge" data-i18n="edu-b-ingles">Inglês Empresarial IV — 17</span>
+            <span class="edu-badge">Power BI — 17</span>
+            <span class="edu-badge" data-i18n="edu-b-conflitos">Gestão de Conflitos — 15</span>
+            <span class="edu-badge" data-i18n="edu-b-informatica">Informática Aplicada — 15</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJETOS -->
+<section id="projetos">
+  <div class="section-inner">
+    <p class="section-label reveal" data-i18n="lbl-trabalhos">Trabalhos</p>
+    <h2 class="section-title reveal" data-i18n="ttl-proj">Projetos de Marketing &amp; Design</h2>
+    <p class="section-subtitle reveal" data-i18n="sub-proj">Projetos académicos e profissionais nas áreas de marketing digital, email marketing e design de comunicação.</p>
+
+    <div class="projects-grid">
+      <!-- I-BrakeBicycle -->
+      <div class="project-card wide reveal" onclick="openModal('modal-ibrakebicycle')">
+        <div class="project-img-wrap">
+          <img src="Desafio%202/Desafio%202.png" alt="I-BrakeBicycle" class="project-img" style="height:280px;object-position:center;">
+        </div>
+        <div class="project-body">
+          <div class="project-cat" data-i18n="pcat-ibrakebicycle">Apresentação · Startup</div>
+          <div class="project-title" data-i18n="ptitle-ibrakebicycle">I-BrakeBicycle — Pitch de Apresentação</div>
+          <div class="project-desc" data-i18n="pdesc-ibrakebicycle">Apresentação final de uma startup de tecnologia para ciclismo. Sistema inteligente de travões com controlo total via app, para todas as pessoas, idades e estilos de bicicletas.</div>
+          <div class="project-tools">
+            <span class="tool-tag">PowerPoint</span>
+            <span class="tool-tag">Design</span>
+            <span class="tool-tag">Pitch</span>
+            <span class="tool-tag">Startup</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Marketing Newsletter -->
+      <div class="project-card reveal" onclick="openModal('modal-newsletter')">
+        <div class="project-img-wrap">
+          <img src="covers/email_marketing_cover.png" alt="Campanha de Email Marketing" class="project-img">
+        </div>
+        <div class="project-body">
+          <div class="project-cat" data-i18n="pcat-newsletter">Marketing Digital</div>
+          <div class="project-title" data-i18n="ptitle-newsletter">Campanha de Email Marketing</div>
+          <div class="project-desc" data-i18n="pdesc-newsletter">Criação de campanhas de email marketing com newsletter e calls-to-action otimizados para conversão.</div>
+          <div class="project-tools">
+            <span class="tool-tag">Email Marketing</span>
+            <span class="tool-tag">Newsletter</span>
+            <span class="tool-tag">CTA</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mundo do Desporto -->
+      <div class="project-card reveal" onclick="openModal('modal-desporto')">
+        <div class="project-img-wrap">
+          <img src="covers/tenis.jpeg" alt="Mundo do Desporto — Dia Aberto" class="project-img">
+        </div>
+        <div class="project-body">
+          <div class="project-cat" data-i18n="pcat-desporto">Design · Comunicação</div>
+          <div class="project-title" data-i18n="ptitle-desporto">Mundo do Desporto — Dia Aberto</div>
+          <div class="project-desc" data-i18n="pdesc-desporto">Peça de comunicação visual para evento desportivo. Dia aberto no CITL com convite ao treino coletivo.</div>
+          <div class="project-tools">
+            <span class="tool-tag" data-i18n="tool-design-grafico">Design Gráfico</span>
+            <span class="tool-tag" data-i18n="tool-com-visual">Comunicação Visual</span>
+            <span class="tool-tag" data-i18n="tool-evento">Evento</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Googl It -->
+      <div class="project-card reveal" onclick="openModal('modal-googlit')">
+        <div class="project-img-wrap">
+          <img src="covers/googl_it_cover.png" alt="Googl It & Desafios" class="project-img">
+        </div>
+        <div class="project-body">
+          <div class="project-cat" data-i18n="pcat-googlit">Apresentação · Académico</div>
+          <div class="project-title" data-i18n="ptitle-googlit">Googl'It &amp; Desafios Académicos</div>
+          <div class="project-desc" data-i18n="pdesc-googlit">Projetos académicos de pesquisa e apresentação, desenvolvendo competências de comunicação e análise digital.</div>
+          <div class="project-tools">
+            <span class="tool-tag" data-i18n="tool-pesquisa">Pesquisa</span>
+            <span class="tool-tag">PowerPoint</span>
+            <span class="tool-tag" data-i18n="tool-academico">Académico</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Site -->
+      <div class="project-card reveal" onclick="openModal('modal-site')">
+        <div class="project-img-wrap">
+          <img src="covers/tenis_site_cover.png" alt="Mundo do Desporto — Website" class="project-img">
+        </div>
+        <div class="project-body">
+          <div class="project-cat" data-i18n="pcat-site">Web Design · Desenvolvimento</div>
+          <div class="project-title" data-i18n="ptitle-site">Mundo do Desporto — Website</div>
+          <div class="project-desc" data-i18n="pdesc-site">Website criado para o evento Dia Aberto no CITL — design, estrutura e conteúdo de site desportivo com identidade visual coesa.</div>
+          <div class="project-tools">
+            <span class="tool-tag">Web Design</span>
+            <span class="tool-tag">Wix</span>
+            <span class="tool-tag" data-i18n="tool-id-visual">Identidade Visual</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="project-card reveal" onclick="openModal('modal-video')">
+        <div class="project-img-wrap">
+          <img src="covers/video_cover.png" alt="Mundo do Desporto — Vídeo Promocional" class="project-img">
+        </div>
+        <div class="project-body">
+          <div class="project-cat" data-i18n="pcat-video">Edição de Vídeo · Redes Sociais</div>
+          <div class="project-title" data-i18n="ptitle-video">Mundo do Desporto — Vídeo Promocional</div>
+          <div class="project-desc" data-i18n="pdesc-video">Vídeo promocional vertical para redes sociais sobre o evento Dia Aberto no CITL — edição e montagem de conteúdo audiovisual desportivo.</div>
+          <div class="project-tools">
+            <span class="tool-tag" data-i18n="tool-edicao-video">Edição de Vídeo</span>
+            <span class="tool-tag" data-i18n="tool-redes-sociais">Redes Sociais</span>
+            <span class="tool-tag" data-i18n="tool-cont-vertical">Conteúdo Vertical</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BI DASHBOARDS -->
+<section id="bi" class="projects-section">
+  <div class="section-inner">
+    <p class="section-label reveal" data-i18n="lbl-bi">Análise de Dados</p>
+    <h2 class="section-title reveal" data-i18n="ttl-bi">Business Intelligence · Power BI</h2>
+    <p class="section-subtitle reveal" data-i18n="sub-bi">Dashboards interativos desenvolvidos em Power BI para análise de dados de e-commerce — nota 17 valores na unidade curricular.</p>
+
+    <div class="dashboards-grid">
+      <div class="dashboard-card reveal" onclick="openModal('modal-vendas')">
+        <div style="overflow:hidden;">
+          <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Vendas.png" alt="Painel de Vendas" class="dashboard-img">
+        </div>
+        <div class="dashboard-body">
+          <div class="dashboard-title" data-i18n="dtitle-vendas">Painel de Vendas</div>
+          <div class="dashboard-desc" data-i18n="ddesc-vendas">Receita total, quantidade vendida, tempo médio de aprovação e TOP 5/10 categorias de produtos.</div>
+        </div>
+      </div>
+
+      <div class="dashboard-card reveal" onclick="openModal('modal-clientes')">
+        <div style="overflow:hidden;">
+          <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Clientes.png" alt="Painel de Clientes" class="dashboard-img">
+        </div>
+        <div class="dashboard-body">
+          <div class="dashboard-title" data-i18n="dtitle-clientes">Painel de Clientes</div>
+          <div class="dashboard-desc" data-i18n="ddesc-clientes">Total de clientes por estado, TOP 5 cidades e análise cidade × tipo de pagamento.</div>
+        </div>
+      </div>
+
+      <div class="dashboard-card reveal" onclick="openModal('modal-pagamento')">
+        <div style="overflow:hidden;">
+          <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Pagamento.png" alt="Painel de Pagamento" class="dashboard-img">
+        </div>
+        <div class="dashboard-body">
+          <div class="dashboard-title" data-i18n="dtitle-pagamento">Painel de Pagamento</div>
+          <div class="dashboard-desc" data-i18n="ddesc-pagamento">Total pago por tipo de pagamento: credit card (73%), wallet, voucher e debit card.</div>
+        </div>
+      </div>
+
+      <div class="dashboard-card reveal" onclick="openModal('modal-produtos')">
+        <div style="overflow:hidden;">
+          <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Produtos.png" alt="Painel de Produtos" class="dashboard-img">
+        </div>
+        <div class="dashboard-body">
+          <div class="dashboard-title" data-i18n="dtitle-produtos">Painel de Produtos</div>
+          <div class="dashboard-desc" data-i18n="ddesc-produtos">Receita por categoria, participação percentual e quantidade vendida por categoria de produto.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem;" class="reveal">
+      <div class="dashboard-card">
+        <div class="dashboard-body" style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+          <div>
+            <div class="project-cat" data-i18n="pcat-mapa">Mapa Geográfico</div>
+            <div class="dashboard-title" data-i18n="dtitle-mapa">Painel Receita por Estado — Mapa</div>
+            <div class="dashboard-desc" data-i18n="ddesc-mapa">Visualização geográfica da receita total de 13,11M por estado e cidade em todo o Brasil, com mapa interativo Microsoft Bing.</div>
+          </div>
+          <button onclick="openModal('modal-mapa')" data-i18n="btn-verdash" style="background:none;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.4rem;cursor:pointer;white-space:nowrap;font-size:0.85rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">Ver Dashboard →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DOCUMENTOS -->
+<section id="documentos">
+  <div class="section-inner">
+    <p class="section-label reveal" data-i18n="lbl-docs">Documentos</p>
+    <h2 class="section-title reveal" data-i18n="ttl-docs">CV &amp; Carta de Apresentação</h2>
+    <p class="section-subtitle reveal" data-i18n="sub-docs">Documentos profissionais disponíveis para consulta.</p>
+
+    <div class="docs-grid">
+      <div class="doc-card reveal" onclick="openModal('modal-cv')" style="cursor:pointer;">
+        <div class="doc-icon">📄</div>
+        <div class="doc-info">
+          <div class="doc-type" data-i18n="doctype-cv">Curriculum Vitae</div>
+          <div class="doc-title" data-i18n="doctitle-cv">CV — Tiago Lagos</div>
+          <div class="doc-desc" data-i18n="docdesc-cv">Curriculum vitae completo com experiência profissional, formação académica, competências e línguas. Licenciado em Relações Humanas e Comunicação Organizacional.</div>
+        </div>
+      </div>
+
+      <div class="doc-card reveal" onclick="openModal('modal-carta')" style="cursor:pointer;">
+        <div class="doc-icon">✉️</div>
+        <div class="doc-info">
+          <div class="doc-type" data-i18n="doctype-carta">Carta de Apresentação</div>
+          <div class="doc-title" data-i18n="doctitle-carta">Cover Letter — Tiago Lagos</div>
+          <div class="doc-desc" data-i18n="docdesc-carta">Carta de apresentação para candidatura a Recursos Humanos, destacando 18 anos de experiência, liderança de equipas e formação académica recente.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACTO -->
+<section id="contacto" class="contact-section">
+  <div class="section-inner">
+    <p class="section-label reveal" data-i18n="lbl-vamos-falar">Vamos falar</p>
+    <h2 class="section-title reveal" data-i18n="ttl-contacto">Contacto</h2>
+
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-item">
+          <div class="contact-icon">📱</div>
+          <div>
+            <div class="contact-label" data-i18n="clbl-telemovel">Telemóvel</div>
+            <div class="contact-value"><a href="tel:+351912406553">+351 912 406 553</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label" data-i18n="clbl-email">Email</div>
+            <div class="contact-value"><a href="mailto:tiagolagos7@gmail.com">tiagolagos7@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label" data-i18n="clbl-localizacao">Localização</div>
+            <div class="contact-value">Leiria, Portugal</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💼</div>
+          <div>
+            <div class="contact-label" data-i18n="clbl-linkedin">LinkedIn</div>
+            <div class="contact-value"><a href="https://www.linkedin.com/in/tiago-lagos-331b2338/" target="_blank">linkedin.com/in/tiago-lagos-331b2338</a></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div style="background:var(--card);border:1px solid var(--border);padding:2.5rem;">
+          <p class="section-label" style="margin-bottom:1.5rem;" data-i18n="lbl-disponibilidade">Disponibilidade</p>
+          <p data-i18n-html="avail-text" style="color:var(--muted);line-height:1.8;margin-bottom:1.5rem;">Aberto a oportunidades nas áreas de <strong style="color:var(--text);">Recursos Humanos</strong>, <strong style="color:var(--text);">Comunicação Organizacional</strong>, <strong style="color:var(--text);">Gestão de Equipas</strong> e <strong style="color:var(--text);">Marketing Digital</strong>.</p>
+          <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
+            <span class="tag" style="border-color:rgba(200,169,110,0.4);color:var(--accent);">✓ Full-time</span>
+            <span class="tag" style="border-color:rgba(200,169,110,0.4);color:var(--accent);">✓ Part-time</span>
+            <span class="tag" data-i18n="avail-remoto" style="border-color:rgba(200,169,110,0.4);color:var(--accent);">✓ Remoto</span>
+          </div>
+          <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);">
+            <a href="mailto:tiagolagos7@gmail.com" class="btn-primary" data-i18n="btn-email" style="display:inline-block;">Enviar Email →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Tiago Lagos</div>
+  <div class="footer-text" data-i18n="footer-text">© 2025 · Portfolio Profissional · Leiria, Portugal</div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-ibrakebicycle">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-ibrakebicycle')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-ibrakebicycle">Apresentação · Startup · Marketing Digital</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;">I-BrakeBicycle</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-ibrakebicycle">Startup de tecnologia para ciclismo urbano e desportivo — sistema inteligente de travões com controlo via app. Inclui pitch de apresentação, campanha de marketing digital, presença em redes sociais e estratégia de conteúdo SEO.</p>
+      <img src="Desafio%205%20ZIP/Desafio%205/Newsletter%20CTA.jpg" alt="I-BrakeBicycle Newsletter" class="modal-img" style="margin-bottom:1rem;border:1px solid var(--border);">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+        <img src="Desafio%205%20ZIP/Desafio%205/brake_app_main_page_image.jpg" alt="App Brake Control" class="modal-img" style="border:1px solid var(--border);">
+        <img src="Desafio%205%20ZIP/Desafio%205/brake_lever_adapter_sensor_image.jpg" alt="Sensor Adapter" class="modal-img" style="border:1px solid var(--border);">
+      </div>
+      <div style="font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem;" data-i18n="mlbl-redes-sociais">Redes Sociais</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem;">
+        <img src="Desafio%203/facebook-ad-mockup.jpg" alt="Facebook Ad" class="modal-img" style="border:1px solid var(--border);">
+        <img src="Desafio%203/instagram-ad-mockup.jpg" alt="Instagram Ad" class="modal-img" style="border:1px solid var(--border);">
+        <img src="Desafio%203/linkedin-ad-mockup.jpg" alt="LinkedIn Ad" class="modal-img" style="border:1px solid var(--border);">
+      </div>
+      <img src="Desafio%205%20ZIP/Desafio%205/Artigo%20SEO.jpg" alt="Artigo SEO" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="background:var(--surface);padding:1.2rem;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.75rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:0.3rem;" data-i18n="mlbl-apres-final">Apresentação Final</div>
+          <p style="color:var(--muted);font-size:0.85rem;" data-i18n="mdl-apres-final-desc">Pitch completo da startup — produto, mercado, posicionamento e estratégia.</p>
+        </div>
+        <a href="Desafio%201/I-Brakebicycle_Apresentacao_Final.pptx" download style="background:none;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.4rem;text-decoration:none;font-size:0.85rem;white-space:nowrap;flex-shrink:0;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">⬇ Download PPTX</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-newsletter">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-newsletter')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-newsletter">Marketing Digital</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-newsletter">Campanha de Email Marketing</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-newsletter">Criação de peças de email marketing com newsletter e calls-to-action otimizados para conversão, desenvolvido no âmbito da unidade curricular de Aplicações de Marketing Digital (nota: 19 valores).</p>
+      <img src="covers/email_marketing_cover.png" alt="Campanha de Email Marketing" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="background:var(--surface);padding:1.2rem;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.75rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:0.3rem;" data-i18n="mlbl-apres-completa">Apresentação Completa</div>
+          <p style="color:var(--muted);font-size:0.85rem;" data-i18n="mdl-apres-completa-desc">Descarregue o PowerPoint com o design completo da campanha.</p>
+        </div>
+        <a href="Desafio%204/Email%20Marketing.pptx" download style="background:none;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.4rem;text-decoration:none;font-size:0.85rem;white-space:nowrap;flex-shrink:0;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">⬇ Download PPTX</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-desporto">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-desporto')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-desporto">Design · Comunicação Visual</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-desporto">Mundo do Desporto</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-desporto">Peça de comunicação visual para evento desportivo — Dia Aberto no CITL a 24/04/24. Convite ao treino coletivo com estética desportiva arrojada. Inclui website criado para o evento.</p>
+      <img src="covers/tenis.jpeg" alt="Mundo do Desporto — Dia Aberto CITL" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="background:var(--surface);padding:1.2rem;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.75rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:0.3rem;" data-i18n="mlbl-website-evento">Website do Evento</div>
+          <p style="color:var(--muted);font-size:0.85rem;" data-i18n="mdl-website-desc">Visite o website criado para o evento desportivo.</p>
+        </div>
+        <a href="https://tiagolagos7.wixsite.com/my-site-1" target="_blank" data-i18n="btn-visitar" style="background:none;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.4rem;text-decoration:none;font-size:0.85rem;white-space:nowrap;flex-shrink:0;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">Visitar Website →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-googlit">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-googlit')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-googlit">Projetos Académicos</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-googlit">Googl'It &amp; Desafios</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-googlit">Projetos académicos desenvolvidos durante a licenciatura, focados em pesquisa digital, comunicação e apresentação de conteúdos relevantes.</p>
+      <img src="covers/googl_it_cover.png" alt="Googl It & Desafios" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="background:var(--surface);padding:1.2rem;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.75rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:0.3rem;" data-i18n="mlbl-apres">Apresentação</div>
+          <p style="color:var(--muted);font-size:0.85rem;" data-i18n="mdl-apres-desc">Descarregue o PowerPoint com a apresentação completa.</p>
+        </div>
+        <a href="Desafio%205%20ZIP/Desafio%205/Googl%27it.pptx" download style="background:none;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.4rem;text-decoration:none;font-size:0.85rem;white-space:nowrap;flex-shrink:0;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">⬇ Download PPTX</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-site">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-site')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-site">Web Design · Desenvolvimento</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-site">Mundo do Desporto — Website</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-site">Website criado para o evento Dia Aberto no CITL a 24/04/24 — design, estrutura e conteúdo com identidade visual desportiva coesa, desenvolvido em Wix.</p>
+      <img src="covers/tenis_site_cover.png" alt="Mundo do Desporto — Website" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="background:var(--surface);padding:1.2rem;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.75rem;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:0.3rem;" data-i18n="mlbl-website-evento">Website do Evento</div>
+          <p style="color:var(--muted);font-size:0.85rem;" data-i18n="mdl-website-desc">Visite o website criado para o evento desportivo.</p>
+        </div>
+        <a href="https://tiagolagos7.wixsite.com/my-site-1" target="_blank" data-i18n="btn-visitar" style="background:none;border:1px solid var(--border);color:var(--text);padding:0.6rem 1.4rem;text-decoration:none;font-size:0.85rem;white-space:nowrap;flex-shrink:0;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">Visitar Website →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-video">
+  <div class="modal-box" style="max-width:500px;">
+    <div class="modal-close"><button onclick="closeModal('modal-video')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div style="padding:1.2rem 1.5rem 0.8rem;">
+      <p class="project-cat" data-i18n="mcat-video">Comunicação Visual · Edição de Vídeo</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:0.5rem;" data-i18n="mttl-video">Mundo do Desporto — Vídeo Promocional</h3>
+      <p style="color:var(--muted);font-size:0.85rem;" data-i18n="mdesc-video">Vídeo promocional vertical para redes sociais, criado para o evento Dia Aberto no CITL a 24/04/24 — edição e montagem de conteúdo audiovisual desportivo.</p>
+    </div>
+    <video src="videos/tenis_video.mp4" style="width:100%;display:block;max-height:80vh;margin-bottom:1.2rem;" controls playsinline></video>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-vendas">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-vendas')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-bi">Power BI · Business Intelligence</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-vendas">Painel de Vendas</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-vendas">Dashboard Power BI com análise completa de vendas: receita total de 13,11M, 38,28K produtos vendidos, tempo médio de aprovação de 12,48 horas, e TOP 5/10 categorias.</p>
+      <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Vendas.png" alt="Painel de Vendas" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1.2rem;text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--accent);">13,11M</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem;" data-i18n="mstat-receita">Receita Total</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1.2rem;text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--accent);">38,28K</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem;" data-i18n="mstat-produtos">Produtos Vendidos</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1.2rem;text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--accent);">12,48h</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem;" data-i18n="mstat-tempo">Tempo Médio Aprovação</div>
+        </div>
+      </div>
+      <div style="background:var(--surface);padding:1.2rem;border:1px solid var(--border);">
+        <p style="color:var(--muted);font-size:0.85rem;" data-i18n="mstat-cat-text">TOP 5 categorias mais vendidas: Toys, Health & Beauty, Bed Bath Table, Sports Leisure, Computers & Accessories. Receita Total (Vendas + Shipping) com gauge visual.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-clientes">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-clientes')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-bi">Power BI · Business Intelligence</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-clientes">Painel de Clientes</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-clientes">Análise de 38.279 clientes distribuídos por estados brasileiros, com TOP 5 cidades e análise cruzada cidade × tipo de pagamento.</p>
+      <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Clientes.png" alt="Painel de Clientes" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1.2rem;">
+          <div style="font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;" data-i18n="mlbl-top5cidades">TOP 5 CIDADES</div>
+          <div style="color:var(--muted);font-size:0.85rem;line-height:1.8;">1. São Paulo<br>2. Brasília<br>3. Santos<br>4. Manaus<br>5. Morro Agudo</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);padding:1.2rem;">
+          <div style="font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem;" data-i18n="mlbl-clientes-estado">CLIENTES P/ ESTADO</div>
+          <div style="color:var(--muted);font-size:0.85rem;line-height:1.8;">BA: 1.275<br>AL: 142<br>AM: 52<br>AC: 30<br>AP: 20</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-pagamento">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-pagamento')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-bi">Power BI · Business Intelligence</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-pagamento">Painel de Pagamento</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-pagamento">Distribuição do total pago de 10,25M por tipo de pagamento, com gráfico de donut para visualização percentual.</p>
+      <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Pagamento.png" alt="Painel de Pagamento" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+        <div style="background:var(--surface);border:1px solid rgba(30,120,230,0.3);padding:1.2rem;text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#7ec8e3;">73,35%</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem;">Credit Card · 7,52M</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid rgba(30,30,200,0.3);padding:1.2rem;text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#8080ff;">19,16%</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem;">Wallet · 1,96M</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid rgba(200,100,30,0.3);padding:1.2rem;text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#e8935a;">6,22%</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem;">Voucher · 0,64M</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid rgba(200,30,200,0.3);padding:1.2rem;text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:1.3rem;color:#d060d0;">1,27%</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem;">Debit Card</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-produtos">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-produtos')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-bi">Power BI · Business Intelligence</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-produtos">Painel de Produtos</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-produtos">Receita por categoria de produto, participação percentual no total e quantidade vendida. Categoria dominante: Toys com 74,83% da receita.</p>
+      <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Produtos.png" alt="Painel de Produtos" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="background:var(--surface);border:1px solid var(--border);padding:1.5rem;">
+        <div style="font-size:0.75rem;color:var(--accent);margin-bottom:1rem;" data-i18n="mlbl-top-cat">TOP CATEGORIAS POR RECEITA</div>
+        <div style="color:var(--muted);font-size:0.85rem;line-height:2;">
+          <span style="color:var(--text);">Bed Bath Table</span> — 252.137 ·
+          <span style="color:var(--text);">Baby</span> — 71.535 ·
+          <span style="color:var(--text);">Auto</span> — 101.963 ·
+          <span style="color:var(--text);">Air Conditioning</span> — 13.527 ·
+          <span style="color:var(--text);">Audio</span> — 8.630
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-mapa">
+  <div class="modal-box">
+    <div class="modal-close"><button onclick="closeModal('modal-mapa')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content">
+      <p class="project-cat" data-i18n="mcat-bi">Power BI · Business Intelligence</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:1rem;" data-i18n="mttl-mapa">Painel Receita por Estado — Mapa</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem;" data-i18n="mdesc-mapa">Visualização geográfica da receita total de 13,11M distribuída por estados e cidades do Brasil. Mapa interativo com Microsoft Bing, com fórmula DAX para cálculo de métricas.</p>
+      <img src="Imagens%20Business%20Intelligence%20Power%20BI/Painel%20Receita%20Estado%20-%20Mapa.png" alt="Painel Receita por Estado — Mapa" class="modal-img" style="margin-bottom:1.5rem;border:1px solid var(--border);">
+      <div style="background:var(--surface);border:1px solid var(--border);padding:1.5rem;">
+        <div style="font-size:0.75rem;color:var(--accent);margin-bottom:0.8rem;" data-i18n="mlbl-destaques">DESTAQUES</div>
+        <div style="color:var(--muted);font-size:0.85rem;line-height:1.8;">
+          • Maceió (AL): 30.393<br>
+          • Rio Branco (AC): 8.323<br>
+          • Arapiraca (AL): 3.422<br>
+          • Total geral: 13.110.554,96
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cv">
+  <div class="modal-box" style="max-width:860px;">
+    <div class="modal-close"><button onclick="closeModal('modal-cv')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content" style="padding:1.2rem 1.5rem 0.5rem;">
+      <p class="project-cat" data-i18n="mcat-doc">Documento Profissional</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:1rem;" data-i18n="mttl-cv">Curriculum Vitae — Tiago Lagos</h3>
+    </div>
+    <div id="cv-pdf-container" style="width:100%;background:#fff;"></div>
+    <div style="padding:1rem 1.5rem 1.5rem;text-align:right;">
+      <a href="documents/CV%20Tiago%20Lagos.pdf" download data-i18n="btn-download-pdf" style="background:none;border:1px solid var(--border);color:var(--text);padding:0.5rem 1.2rem;text-decoration:none;font-size:0.82rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">⬇ Download PDF</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-carta">
+  <div class="modal-box" style="max-width:860px;">
+    <div class="modal-close"><button onclick="closeModal('modal-carta')" data-i18n="btn-fechar">✕ Fechar</button></div>
+    <div class="modal-content" style="padding:1.2rem 1.5rem 0.5rem;">
+      <p class="project-cat" data-i18n="mcat-doc">Documento Profissional</p>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:1rem;" data-i18n="mttl-carta">Carta de Apresentação — Tiago Lagos</h3>
+    </div>
+    <div id="carta-pdf-container" style="width:100%;background:#fff;"></div>
+    <div style="padding:1rem 1.5rem 1.5rem;text-align:right;">
+      <a href="documents/Cover%20Letter%20Tiago%20Lagos.pdf" download data-i18n="btn-download-pdf" style="background:none;border:1px solid var(--border);color:var(--text);padding:0.5rem 1.2rem;text-decoration:none;font-size:0.82rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">⬇ Download PDF</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── PDF.js setup ── */
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+function renderPDF(url, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container || container.dataset.rendered) return;
+  container.dataset.rendered = 'true';
+  pdfjsLib.getDocument(url).promise.then(pdf => {
+    const renderPage = (num) => {
+      pdf.getPage(num).then(page => {
+        const w = container.offsetWidth || 820;
+        const vp0 = page.getViewport({ scale: 1 });
+        const scale = w / vp0.width;
+        const vp = page.getViewport({ scale });
+        const canvas = document.createElement('canvas');
+        canvas.width = vp.width;
+        canvas.height = vp.height;
+        canvas.style.width = '100%';
+        canvas.style.display = 'block';
+        if (num > 1) canvas.style.borderTop = '6px solid var(--bg)';
+        container.appendChild(canvas);
+        page.render({ canvasContext: canvas.getContext('2d'), viewport: vp });
+      });
+    };
+    for (let i = 1; i <= pdf.numPages; i++) renderPage(i);
+  }).catch(() => {
+    container.innerHTML = '<p style="color:var(--muted);padding:2rem;text-align:center;">Não foi possível carregar o PDF. Use o botão de download.</p>';
+  });
+}
+
+/* ── Modal helpers ── */
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (id === 'modal-cv')    renderPDF('documents/CV%20Tiago%20Lagos.pdf',          'cv-pdf-container');
+  if (id === 'modal-carta') renderPDF('documents/Cover%20Letter%20Tiago%20Lagos.pdf', 'carta-pdf-container');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => {
+    if (e.target === m) { m.classList.remove('open'); document.body.style.overflow = ''; }
+  });
+});
+
+/* ── Language toggle ── */
+let currentLang = 'pt';
+
+const t = {
+  pt: {
+    'nav-sobre':'Sobre','nav-exp':'Experiência','nav-proj':'Projetos',
+    'nav-bi':'Business Intelligence','nav-docs':'Documentos','nav-contact':'Contacto',
+    'hero-eyebrow':'Portfolio Profissional',
+    'hero-role':'Relações Humanas · Manager · Team Leader<br>com interesse em Marketing Digital &amp; Business Intelligence',
+    'tag-rh':'Recursos Humanos','tag-equipas':'Gestão de Equipas','tag-marketing':'Marketing Digital',
+    'tag-logistica':'Logística','tag-comunicacao':'Comunicação',
+    'btn-trabalhos':'Ver Trabalhos','btn-contactar':'Contactar',
+    'stat-anos':'Anos Exp.','stat-entrevistas':'Entrevistas','stat-linguas':'Línguas',
+    'lbl-quem-sou':'Quem Sou','ttl-sobre':'Sobre Mim',
+    'about-p1':'Licenciado em <strong>Relações Humanas e Comunicação Organizacional</strong>, com experiência consolidada em liderança de equipas, recursos humanos e operações.',
+    'about-p2':'Com mais de <strong>18 anos de experiência</strong> em logística e supply chain, tive a oportunidade de trabalhar em vários setores, incluindo informática, eletrónica, música e retalho.',
+    'about-p3':'Lidero pelo exemplo, esforçando-me por inspirar aqueles ao meu redor com uma forte ética de trabalho, elevados padrões e <strong>pensamento crítico</strong>. Estou constantemente à procura de formas de melhorar a eficiência.',
+    'about-p4':'Destaco-me pela capacidade de comunicação, gestão de pessoas e análise de processos, com interesse em desenvolver carreira nas áreas de <strong>comunicação organizacional, recursos humanos e marketing digital</strong>.',
+    'lbl-competencias':'Competências',
+    'skill-lideranca':'Liderança de Equipas','skill-comunicacao':'Comunicação Eficaz',
+    'skill-marketing':'Marketing Digital','skill-tempo':'Gestão do Tempo',
+    'skill-resolucao':'Resolução Problemas','skill-recrutamento':'Recrutamento & RH',
+    'skill-critico':'Pensamento Crítico',
+    'lbl-linguas':'Línguas','lang-nativo':'Nativo','lang-avancado':'Avançado · C1',
+    'lang-intermedio-b2':'Intermédio · B2','lang-intermedio-b1':'Intermédio · B1',
+    'lang-name-pt':'Português','lang-name-en':'Inglês','lang-name-fr':'Francês','lang-name-es':'Espanhol',
+    'lbl-trajetoria':'Trajetória','ttl-exp':'Experiência Profissional',
+    'sub-exp':'Uma carreira construída com liderança, adaptabilidade e resultados consistentes.',
+    'exp-year-1':'2025 · Atual','exp-role-1':'Assistente de Recursos Humanos',
+    'exp-co-1':'MD Plastics · Estágio Curricular',
+    'exp-desc-1':'Desenvolvimento de planos de comunicação interna. Criação e atualização de descrições de funções. Monitorização de indicadores de RH (absentismo e rotatividade). Gestão administrativa de colaboradores.',
+    'exp-year-2':'2023 — 2024','exp-role-2':'Team Lead · Manager',
+    'exp-co-2':'Nike · Roermond, Países Baixos',
+    'exp-desc-2':'Liderança de equipa com cerca de 20 colaboradores em ambiente de alta performance. Planeamento operacional, análise de KPIs e implementação de melhorias contínuas. Recrutamento e formação de novos colaboradores.',
+    'exp-year-3':'2020 — 2023','exp-role-3':'Gestor de Operações de Armazém','exp-co-3':'Pc Diga',
+    'exp-desc-3':'Gestão de stocks e encomendas através de SAP. Coordenação de equipa e organização de operações diárias. Planeamento semanal e otimização de processos. Formação de novos colaboradores.',
+    'lbl-formacao':'Formação Académica',
+    'edu-degree':'Licenciatura em Relações Humanas e Comunicação Organizacional',
+    'edu-b-marketing':'Marketing Digital — 19','edu-b-estagio':'Estágio Curricular — 18',
+    'edu-b-multimedia':'Comunicação Multimédia — 17','edu-b-ingles':'Inglês Empresarial IV — 17',
+    'edu-b-conflitos':'Gestão de Conflitos — 15','edu-b-informatica':'Informática Aplicada — 15',
+    'lbl-trabalhos':'Trabalhos','ttl-proj':'Projetos de Marketing & Design',
+    'sub-proj':'Projetos académicos e profissionais nas áreas de marketing digital, email marketing e design de comunicação.',
+    'pcat-ibrakebicycle':'Apresentação · Startup',
+    'ptitle-ibrakebicycle':'I-BrakeBicycle — Pitch de Apresentação',
+    'pdesc-ibrakebicycle':'Apresentação final de uma startup de tecnologia para ciclismo. Sistema inteligente de travões com controlo total via app, para todas as pessoas, idades e estilos de bicicletas.',
+    'pcat-newsletter':'Marketing Digital','ptitle-newsletter':'Campanha de Email Marketing',
+    'pdesc-newsletter':'Criação de campanhas de email marketing com newsletter e calls-to-action otimizados para conversão.',
+    'pcat-desporto':'Design · Comunicação','ptitle-desporto':'Mundo do Desporto — Dia Aberto',
+    'pdesc-desporto':'Peça de comunicação visual para evento desportivo. Dia aberto no CITL com convite ao treino coletivo.',
+    'pcat-googlit':'Apresentação · Académico',"ptitle-googlit":"Googl'It & Desafios Académicos",
+    'pdesc-googlit':'Projetos académicos de pesquisa e apresentação, desenvolvendo competências de comunicação e análise digital.',
+    'pcat-site':'Web Design · Desenvolvimento','ptitle-site':'Mundo do Desporto — Website',
+    'pdesc-site':'Website criado para o evento Dia Aberto no CITL — design, estrutura e conteúdo de site desportivo com identidade visual coesa.',
+    'pcat-video':'Edição de Vídeo · Redes Sociais','ptitle-video':'Mundo do Desporto — Vídeo Promocional',
+    'pdesc-video':'Vídeo promocional vertical para redes sociais sobre o evento Dia Aberto no CITL — edição e montagem de conteúdo audiovisual desportivo.',
+    'tool-design-grafico':'Design Gráfico','tool-com-visual':'Comunicação Visual','tool-evento':'Evento',
+    'tool-pesquisa':'Pesquisa','tool-academico':'Académico','tool-id-visual':'Identidade Visual',
+    'tool-edicao-video':'Edição de Vídeo','tool-redes-sociais':'Redes Sociais','tool-cont-vertical':'Conteúdo Vertical',
+    'lbl-bi':'Análise de Dados','ttl-bi':'Business Intelligence · Power BI',
+    'sub-bi':'Dashboards interativos desenvolvidos em Power BI para análise de dados de e-commerce — nota 17 valores na unidade curricular.',
+    'dtitle-vendas':'Painel de Vendas','ddesc-vendas':'Receita total, quantidade vendida, tempo médio de aprovação e TOP 5/10 categorias de produtos.',
+    'dtitle-clientes':'Painel de Clientes','ddesc-clientes':'Total de clientes por estado, TOP 5 cidades e análise cidade × tipo de pagamento.',
+    'dtitle-pagamento':'Painel de Pagamento','ddesc-pagamento':'Total pago por tipo de pagamento: credit card (73%), wallet, voucher e debit card.',
+    'dtitle-produtos':'Painel de Produtos','ddesc-produtos':'Receita por categoria, participação percentual e quantidade vendida por categoria de produto.',
+    'pcat-mapa':'Mapa Geográfico','dtitle-mapa':'Painel Receita por Estado — Mapa',
+    'ddesc-mapa':'Visualização geográfica da receita total de 13,11M por estado e cidade em todo o Brasil, com mapa interativo Microsoft Bing.',
+    'btn-verdash':'Ver Dashboard →',
+    'lbl-docs':'Documentos','ttl-docs':'CV & Carta de Apresentação',
+    'sub-docs':'Documentos profissionais disponíveis para consulta.',
+    'doctype-cv':'Curriculum Vitae','doctitle-cv':'CV — Tiago Lagos',
+    'docdesc-cv':'Curriculum vitae completo com experiência profissional, formação académica, competências e línguas. Licenciado em Relações Humanas e Comunicação Organizacional.',
+    'doctype-carta':'Carta de Apresentação','doctitle-carta':'Cover Letter — Tiago Lagos',
+    'docdesc-carta':'Carta de apresentação para candidatura a Recursos Humanos, destacando 18 anos de experiência, liderança de equipas e formação académica recente.',
+    'lbl-vamos-falar':'Vamos falar','ttl-contacto':'Contacto',
+    'clbl-telemovel':'Telemóvel','clbl-email':'Email','clbl-localizacao':'Localização','clbl-linkedin':'LinkedIn',
+    'lbl-disponibilidade':'Disponibilidade',
+    'avail-text':'Aberto a oportunidades nas áreas de <strong style="color:var(--text);">Recursos Humanos</strong>, <strong style="color:var(--text);">Comunicação Organizacional</strong>, <strong style="color:var(--text);">Gestão de Equipas</strong> e <strong style="color:var(--text);">Marketing Digital</strong>.',
+    'avail-remoto':'✓ Remoto','btn-email':'Enviar Email →',
+    'footer-text':'© ' + new Date().getFullYear() + ' · Portfolio Profissional · Leiria, Portugal',
+    'btn-fechar':'✕ Fechar',
+    'mcat-ibrakebicycle':'Apresentação · Startup · Marketing Digital',
+    'mdesc-ibrakebicycle':'Startup de tecnologia para ciclismo urbano e desportivo — sistema inteligente de travões com controlo via app. Inclui pitch de apresentação, campanha de marketing digital, presença em redes sociais e estratégia de conteúdo SEO.',
+    'mlbl-redes-sociais':'Redes Sociais','mlbl-apres-final':'Apresentação Final',
+    'mdl-apres-final-desc':'Pitch completo da startup — produto, mercado, posicionamento e estratégia.',
+    'mcat-newsletter':'Marketing Digital','mttl-newsletter':'Campanha de Email Marketing',
+    'mdesc-newsletter':'Criação de peças de email marketing com newsletter e calls-to-action otimizados para conversão, desenvolvido no âmbito da unidade curricular de Aplicações de Marketing Digital (nota: 19 valores).',
+    'mlbl-apres-completa':'Apresentação Completa',
+    'mdl-apres-completa-desc':'Descarregue o PowerPoint com o design completo da campanha.',
+    'mcat-desporto':'Design · Comunicação Visual','mttl-desporto':'Mundo do Desporto',
+    'mdesc-desporto':'Peça de comunicação visual para evento desportivo — Dia Aberto no CITL a 24/04/24. Convite ao treino coletivo com estética desportiva arrojada. Inclui website criado para o evento.',
+    'mlbl-website-evento':'Website do Evento','mdl-website-desc':'Visite o website criado para o evento desportivo.','btn-visitar':'Visitar Website →',
+    'mcat-googlit':'Projetos Académicos',"mttl-googlit":"Googl'It & Desafios",
+    'mdesc-googlit':'Projetos académicos desenvolvidos durante a licenciatura, focados em pesquisa digital, comunicação e apresentação de conteúdos relevantes.',
+    'mlbl-apres':'Apresentação','mdl-apres-desc':'Descarregue o PowerPoint com a apresentação completa.',
+    'mcat-site':'Web Design · Desenvolvimento','mttl-site':'Mundo do Desporto — Website',
+    'mdesc-site':'Website criado para o evento Dia Aberto no CITL a 24/04/24 — design, estrutura e conteúdo com identidade visual desportiva coesa, desenvolvido em Wix.',
+    'mcat-video':'Comunicação Visual · Edição de Vídeo','mttl-video':'Mundo do Desporto — Vídeo Promocional',
+    'mdesc-video':'Vídeo promocional vertical para redes sociais, criado para o evento Dia Aberto no CITL a 24/04/24 — edição e montagem de conteúdo audiovisual desportivo.',
+    'mcat-bi':'Power BI · Business Intelligence',
+    'mttl-vendas':'Painel de Vendas',
+    'mdesc-vendas':'Dashboard Power BI com análise completa de vendas: receita total de 13,11M, 38,28K produtos vendidos, tempo médio de aprovação de 12,48 horas, e TOP 5/10 categorias.',
+    'mstat-receita':'Receita Total','mstat-produtos':'Produtos Vendidos','mstat-tempo':'Tempo Médio Aprovação',
+    'mstat-cat-text':'TOP 5 categorias mais vendidas: Toys, Health & Beauty, Bed Bath Table, Sports Leisure, Computers & Accessories. Receita Total (Vendas + Shipping) com gauge visual.',
+    'mttl-clientes':'Painel de Clientes',
+    'mdesc-clientes':'Análise de 38.279 clientes distribuídos por estados brasileiros, com TOP 5 cidades e análise cruzada cidade × tipo de pagamento.',
+    'mlbl-top5cidades':'TOP 5 CIDADES','mlbl-clientes-estado':'CLIENTES P/ ESTADO',
+    'mttl-pagamento':'Painel de Pagamento',
+    'mdesc-pagamento':'Distribuição do total pago de 10,25M por tipo de pagamento, com gráfico de donut para visualização percentual.',
+    'mttl-produtos':'Painel de Produtos',
+    'mdesc-produtos':'Receita por categoria de produto, participação percentual no total e quantidade vendida. Categoria dominante: Toys com 74,83% da receita.',
+    'mlbl-top-cat':'TOP CATEGORIAS POR RECEITA',
+    'mttl-mapa':'Painel Receita por Estado — Mapa',
+    'mdesc-mapa':'Visualização geográfica da receita total de 13,11M distribuída por estados e cidades do Brasil. Mapa interativo com Microsoft Bing, com fórmula DAX para cálculo de métricas.',
+    'mlbl-destaques':'DESTAQUES',
+    'mcat-doc':'Documento Profissional','mttl-cv':'Curriculum Vitae — Tiago Lagos',
+    'mttl-carta':'Carta de Apresentação — Tiago Lagos','btn-download-pdf':'⬇ Download PDF',
+  },
+  en: {
+    'nav-sobre':'About','nav-exp':'Experience','nav-proj':'Projects',
+    'nav-bi':'Business Intelligence','nav-docs':'Documents','nav-contact':'Contact',
+    'hero-eyebrow':'Professional Portfolio',
+    'hero-role':'Human Relations · Manager · Team Leader<br>with interest in Digital Marketing &amp; Business Intelligence',
+    'tag-rh':'Human Resources','tag-equipas':'Team Management','tag-marketing':'Digital Marketing',
+    'tag-logistica':'Logistics','tag-comunicacao':'Communication',
+    'btn-trabalhos':'View Work','btn-contactar':'Contact',
+    'stat-anos':'Yrs Exp.','stat-entrevistas':'Interviews','stat-linguas':'Languages',
+    'lbl-quem-sou':'Who I Am','ttl-sobre':'About Me',
+    'about-p1':'Graduate in <strong>Human Relations and Organisational Communication</strong>, with consolidated experience in team leadership, human resources and operations.',
+    'about-p2':'With over <strong>18 years of experience</strong> in logistics and supply chain, I have had the opportunity to work across several sectors, including IT, electronics, music and retail.',
+    'about-p3':'I lead by example, striving to inspire those around me with a strong work ethic, high standards and <strong>critical thinking</strong>. I am constantly looking for ways to improve efficiency.',
+    'about-p4':'I stand out through my ability to communicate, manage people and analyse processes, with an interest in developing my career in <strong>organisational communication, human resources and digital marketing</strong>.',
+    'lbl-competencias':'Skills',
+    'skill-lideranca':'Team Leadership','skill-comunicacao':'Effective Communication',
+    'skill-marketing':'Digital Marketing','skill-tempo':'Time Management',
+    'skill-resolucao':'Problem Solving','skill-recrutamento':'Recruitment & HR',
+    'skill-critico':'Critical Thinking',
+    'lbl-linguas':'Languages','lang-nativo':'Native','lang-avancado':'Advanced · C1',
+    'lang-intermedio-b2':'Intermediate · B2','lang-intermedio-b1':'Intermediate · B1',
+    'lang-name-pt':'Portuguese','lang-name-en':'English','lang-name-fr':'French','lang-name-es':'Spanish',
+    'lbl-trajetoria':'Career','ttl-exp':'Professional Experience',
+    'sub-exp':'A career built on leadership, adaptability and consistent results.',
+    'exp-year-1':'2025 · Present','exp-role-1':'Human Resources Assistant',
+    'exp-co-1':'MD Plastics · Curricular Internship',
+    'exp-desc-1':'Development of internal communication plans. Creation and updating of job descriptions. Monitoring of HR indicators (absenteeism and turnover). Administrative management of employees.',
+    'exp-year-2':'2023 — 2024','exp-role-2':'Team Lead · Manager',
+    'exp-co-2':'Nike · Roermond, Netherlands',
+    'exp-desc-2':'Team leadership of around 20 employees in a high-performance environment. Operational planning, KPI analysis and implementation of continuous improvements. Recruitment and training of new employees.',
+    'exp-year-3':'2020 — 2023','exp-role-3':'Warehouse Operations Manager','exp-co-3':'Pc Diga',
+    'exp-desc-3':'Stock and order management via SAP. Team coordination and daily operations organisation. Weekly planning and process optimisation. Training of new employees.',
+    'lbl-formacao':'Academic Education',
+    'edu-degree':"Bachelor's in Human Relations and Organisational Communication",
+    'edu-b-marketing':'Digital Marketing — 19','edu-b-estagio':'Curricular Internship — 18',
+    'edu-b-multimedia':'Multimedia Communication — 17','edu-b-ingles':'Business English IV — 17',
+    'edu-b-conflitos':'Conflict Management — 15','edu-b-informatica':'Applied IT — 15',
+    'lbl-trabalhos':'Work','ttl-proj':'Marketing & Design Projects',
+    'sub-proj':'Academic and professional projects in digital marketing, email marketing and communication design.',
+    'pcat-ibrakebicycle':'Presentation · Startup',
+    'ptitle-ibrakebicycle':'I-BrakeBicycle — Presentation Pitch',
+    'pdesc-ibrakebicycle':'Final presentation of a cycling technology startup. Smart brake system with full app control, for all people, ages and bicycle styles.',
+    'pcat-newsletter':'Digital Marketing','ptitle-newsletter':'Email Marketing Campaign',
+    'pdesc-newsletter':'Creation of email marketing campaigns with optimised newsletters and calls-to-action for conversion.',
+    'pcat-desporto':'Design · Communication','ptitle-desporto':'Sports World — Open Day',
+    'pdesc-desporto':'Visual communication piece for a sports event. Open day at CITL with an invitation to collective training.',
+    'pcat-googlit':'Presentation · Academic',"ptitle-googlit":"Googl'It & Academic Challenges",
+    'pdesc-googlit':'Academic research and presentation projects, developing communication and digital analysis skills.',
+    'pcat-site':'Web Design · Development','ptitle-site':'Sports World — Website',
+    'pdesc-site':'Website created for the Open Day event at CITL — design, structure and content of a sports website with cohesive visual identity.',
+    'pcat-video':'Video Editing · Social Media','ptitle-video':'Sports World — Promotional Video',
+    'pdesc-video':'Vertical promotional video for social media about the Open Day event at CITL — editing and production of sports audiovisual content.',
+    'tool-design-grafico':'Graphic Design','tool-com-visual':'Visual Communication','tool-evento':'Event',
+    'tool-pesquisa':'Research','tool-academico':'Academic','tool-id-visual':'Visual Identity',
+    'tool-edicao-video':'Video Editing','tool-redes-sociais':'Social Media','tool-cont-vertical':'Vertical Content',
+    'lbl-bi':'Data Analysis','ttl-bi':'Business Intelligence · Power BI',
+    'sub-bi':'Interactive dashboards developed in Power BI for e-commerce data analysis — scored 17/20 in the course unit.',
+    'dtitle-vendas':'Sales Dashboard','ddesc-vendas':'Total revenue, quantity sold, average approval time and TOP 5/10 product categories.',
+    'dtitle-clientes':'Customers Dashboard','ddesc-clientes':'Total customers by state, TOP 5 cities and city × payment type analysis.',
+    'dtitle-pagamento':'Payment Dashboard','ddesc-pagamento':'Total paid by payment type: credit card (73%), wallet, voucher and debit card.',
+    'dtitle-produtos':'Products Dashboard','ddesc-produtos':'Revenue by category, percentage share and quantity sold by product category.',
+    'pcat-mapa':'Geographic Map','dtitle-mapa':'Revenue by State — Map Dashboard',
+    'ddesc-mapa':'Geographic visualisation of 13.11M total revenue by state and city across Brazil, with interactive Microsoft Bing map.',
+    'btn-verdash':'View Dashboard →',
+    'lbl-docs':'Documents','ttl-docs':'CV & Cover Letter',
+    'sub-docs':'Professional documents available for viewing.',
+    'doctype-cv':'Curriculum Vitae','doctitle-cv':'CV — Tiago Lagos',
+    'docdesc-cv':'Complete curriculum vitae with professional experience, academic background, skills and languages. Graduate in Human Relations and Organisational Communication.',
+    'doctype-carta':'Cover Letter','doctitle-carta':'Cover Letter — Tiago Lagos',
+    'docdesc-carta':'Cover letter for a Human Resources application, highlighting 18 years of experience, team leadership and recent academic background.',
+    'lbl-vamos-falar':"Let's talk",'ttl-contacto':'Contact',
+    'clbl-telemovel':'Phone','clbl-email':'Email','clbl-localizacao':'Location','clbl-linkedin':'LinkedIn',
+    'lbl-disponibilidade':'Availability',
+    'avail-text':'Open to opportunities in <strong style="color:var(--text);">Human Resources</strong>, <strong style="color:var(--text);">Organisational Communication</strong>, <strong style="color:var(--text);">Team Management</strong> and <strong style="color:var(--text);">Digital Marketing</strong>.',
+    'avail-remoto':'✓ Remote','btn-email':'Send Email →',
+    'footer-text':'© ' + new Date().getFullYear() + ' · Professional Portfolio · Leiria, Portugal',
+    'btn-fechar':'✕ Close',
+    'mcat-ibrakebicycle':'Presentation · Startup · Digital Marketing',
+    'mdesc-ibrakebicycle':'Cycling technology startup for urban and sport cycling — smart brake system with app control. Includes presentation pitch, digital marketing campaign, social media presence and SEO content strategy.',
+    'mlbl-redes-sociais':'Social Media','mlbl-apres-final':'Final Presentation',
+    'mdl-apres-final-desc':'Complete startup pitch — product, market, positioning and strategy.',
+    'mcat-newsletter':'Digital Marketing','mttl-newsletter':'Email Marketing Campaign',
+    'mdesc-newsletter':'Creation of email marketing pieces with optimised newsletter and calls-to-action for conversion, developed as part of the Digital Marketing Applications course unit (score: 19/20).',
+    'mlbl-apres-completa':'Full Presentation',
+    'mdl-apres-completa-desc':'Download the PowerPoint with the complete campaign design.',
+    'mcat-desporto':'Design · Visual Communication','mttl-desporto':'Sports World',
+    'mdesc-desporto':'Visual communication piece for a sports event — Open Day at CITL on 24/04/24. Invitation to collective training with bold sports aesthetics. Includes website created for the event.',
+    'mlbl-website-evento':'Event Website','mdl-website-desc':'Visit the website created for the sports event.','btn-visitar':'Visit Website →',
+    'mcat-googlit':'Academic Projects',"mttl-googlit":"Googl'It & Challenges",
+    'mdesc-googlit':'Academic projects developed during the degree, focused on digital research, communication and presentation of relevant content.',
+    'mlbl-apres':'Presentation','mdl-apres-desc':'Download the PowerPoint with the full presentation.',
+    'mcat-site':'Web Design · Development','mttl-site':'Sports World — Website',
+    'mdesc-site':'Website created for the Open Day event at CITL on 24/04/24 — design, structure and content with cohesive sports visual identity, developed in Wix.',
+    'mcat-video':'Visual Communication · Video Editing','mttl-video':'Sports World — Promotional Video',
+    'mdesc-video':'Vertical promotional video for social media, created for the Open Day event at CITL on 24/04/24 — editing and production of sports audiovisual content.',
+    'mcat-bi':'Power BI · Business Intelligence',
+    'mttl-vendas':'Sales Dashboard',
+    'mdesc-vendas':'Power BI dashboard with complete sales analysis: total revenue of 13.11M, 38.28K products sold, average approval time of 12.48 hours, and TOP 5/10 categories.',
+    'mstat-receita':'Total Revenue','mstat-produtos':'Products Sold','mstat-tempo':'Avg. Approval Time',
+    'mstat-cat-text':'TOP 5 best-selling categories: Toys, Health & Beauty, Bed Bath Table, Sports Leisure, Computers & Accessories. Total Revenue (Sales + Shipping) with visual gauge.',
+    'mttl-clientes':'Customers Dashboard',
+    'mdesc-clientes':'Analysis of 38,279 customers distributed across Brazilian states, with TOP 5 cities and cross-analysis of city × payment type.',
+    'mlbl-top5cidades':'TOP 5 CITIES','mlbl-clientes-estado':'CUSTOMERS BY STATE',
+    'mttl-pagamento':'Payment Dashboard',
+    'mdesc-pagamento':'Distribution of total paid (10.25M) by payment type, with donut chart for percentage visualisation.',
+    'mttl-produtos':'Products Dashboard',
+    'mdesc-produtos':'Revenue by product category, percentage share of total and quantity sold. Dominant category: Toys with 74.83% of revenue.',
+    'mlbl-top-cat':'TOP CATEGORIES BY REVENUE',
+    'mttl-mapa':'Revenue by State — Map Dashboard',
+    'mdesc-mapa':'Geographic visualisation of 13.11M total revenue distributed across states and cities in Brazil. Interactive map with Microsoft Bing, with DAX formula for metrics calculation.',
+    'mlbl-destaques':'HIGHLIGHTS',
+    'mcat-doc':'Professional Document','mttl-cv':'Curriculum Vitae — Tiago Lagos',
+    'mttl-carta':'Cover Letter — Tiago Lagos','btn-download-pdf':'⬇ Download PDF',
+  }
+};
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t[currentLang][el.getAttribute('data-i18n')];
+    if (v !== undefined) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const v = t[currentLang][el.getAttribute('data-i18n-html')];
+    if (v !== undefined) el.innerHTML = v;
+  });
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'pt' ? 'en' : 'pt';
+  document.getElementById('lang-toggle').textContent = currentLang === 'pt' ? 'EN' : 'PT';
+  document.documentElement.lang = currentLang;
+  applyTranslations();
+}
+
+applyTranslations();
+
+/* ── Reveal on scroll ── */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
